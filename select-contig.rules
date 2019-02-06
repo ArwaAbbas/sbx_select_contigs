@@ -1,0 +1,61 @@
+# -*- mode: Snakemake -*-
+
+HITS_FP = ASSEMBLY_FP/'selected_contigs'
+
+rule find_contigs:
+    input:
+        str(ANNOTATION_FP/'summary'/'{sample}.tsv')
+    output:
+        temp(str(ANNOTATION_FP/'summary'/'{sample}_positive_contigs.txt'))
+    params:
+        scriptdir = sunbeam_dir + '/extensions/sbx_select_contigs/find_contigs.R'
+    shell:
+        """
+        Rscript {params.scriptdir} {input} {output}
+        """
+
+rule select_contigs:
+    input:
+        con = str(ASSEMBLY_FP/'contigs'/'{sample}-contigs.fa'),
+        pos = str(ANNOTATION_FP/'summary'/'{sample}_positive_contigs.txt')
+    output:
+        temp(str(HITS_FP/'{sample}_positive_contigs.fa'))
+    params:
+        scriptdir = sunbeam_dir + '/extensions/sbx_select_contigs/select_contigs.R'
+    shell:
+        """
+        Rscript {params.scriptdir} {input.con} {input.pos} {output}
+        """
+
+rule combine_contigs:
+    input:
+        str(HITS_FP/'{sample}_positive_contigs.fa')
+    output:
+        str(HITS_FP/'combined'/'{sample}_positive_contigs_final.fa')
+    log:
+        str(HITS_FP/'cap3'/'{sample}.out')
+    params:
+        links = str(HITS_FP/'{sample}_positive_contigs.fa.cap.contigs.links'),
+        info = str(HITS_FP/'{sample}_positive_contigs.fa.cap.info'),
+        qual = str(HITS_FP/'{sample}_positive_contigs.fa.cap.contigs.qual'),
+	ace = str(HITS_FP/'{sample}_positive_contigs.fa.cap.ace'),
+	cap3dir = str(HITS_FP/'cap3/')
+    shell:
+        """
+        [[ -s {input} ]] && \
+        cap3 {input} &> {log} && \
+        cat {input}.cap.singlets {input}.cap.contigs > {output} || \
+	cp {input} {output} &> {log}
+	mv {params.info} {params.cap3dir}
+        mv {params.qual} {params.cap3dir}
+        mv {params.ace} {params.cap3dir}
+        mv {params.links} {params.cap3dir}
+        mv {input}.cap.singlets {params.cap3dir}
+	mv {input}.cap.contigs {params.cap3dir}
+	"""
+
+rule select_all:
+    #input:
+        #expand(str(HITS_FP/'{sample}_positive_contigs.fa'),sample = Samples.keys())
+    input:
+        expand(str(HITS_FP/'combined'/'{sample}_positive_contigs_final.fa'),sample = Samples.keys())
