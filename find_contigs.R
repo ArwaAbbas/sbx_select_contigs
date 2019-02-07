@@ -12,7 +12,8 @@ args <- commandArgs()
 
 #print(args)
 annotation <- args[6]
-output <-args[7]
+dbname <- args[7]
+output <-args[8]
 
 if(is.na(annotation)) 
 {
@@ -30,13 +31,17 @@ if(is.na(output))
 # annotation <- "/media/THING2/louis/09_SearchingExternalDatasets/Datasets/PositiveSamples/sunbeam_output/annotation/summary/testsample.tsv"
 # output <- "/media/THING2/louis/09_SearchingExternalDatasets/Datasets/PositiveSamples/sunbeam_output/annotation/summary/test_positive_contig_list.txt"
 
-annotation_df <- read.delim(annotation)
+cols_select <- c("sample", "contig", dbname)
+
+annotation_df <- read.delim(annotation) %>%
+  dplyr::select(one_of(cols_select))
+
+colnames(annotation_df) <- c("sample", "contig", "hit")
 
 annotation_df %>%
-  drop_na(novel_virus) %>%
-  group_by(sample, novel_virus) %$%
+  drop_na(hit) %>%
+  group_by(sample, hit) %$%
   .[order(.$length, decreasing = TRUE),] %>%
-  dplyr::select(c(sample,contig,novel_virus)) %>%
   write_delim(., path = output, 
                  delim = " ")
 

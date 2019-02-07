@@ -53,7 +53,7 @@ select_con_df <- merge(list_con, con_df, by.x = "contig", by.y = "Name",
                        all.x = TRUE, all.y = FALSE)
 select_con_df <- select_con_df[order(nchar(select_con_df$Sequence), decreasing = TRUE),]
 select_con_df <- select(select_con_df, -c(sample, Flag, Multi, Length))
-select_con_df <- unite(select_con_df, col = "Name", c("contig", "novel_virus"), 
+select_con_df <- unite(select_con_df, col = "Name", c("contig", "hit"), 
                        sep = ".")
 
 #Write new FASTA---------------------------------------------------------------

@@ -8,10 +8,11 @@ rule find_contigs:
     output:
         temp(str(ANNOTATION_FP/'summary'/'{sample}_positive_contigs.txt'))
     params:
-        scriptdir = sunbeam_dir + '/extensions/sbx_select_contigs/find_contigs.R'
+        scriptdir = sunbeam_dir + '/extensions/sbx_select_contigs/find_contigs.R',
+        dbname = Cfg['sbx_select_contigs']['dbname']
     shell:
         """
-        Rscript {params.scriptdir} {input} {output}
+        Rscript {params.scriptdir} {input} {params.dbname} {output}
         """
 
 rule select_contigs:
