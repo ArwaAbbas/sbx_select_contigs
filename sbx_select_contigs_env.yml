@@ -7,3 +7,4 @@ dependencies:
   - pyviko
   - r-tidyverse
   - r-magrittr
+  - bioconductor-biostrings
