@@ -22,20 +22,23 @@ Or, just add them manually (works with any version of Sunbeam):
 
     cat $SUNBEAM_DIR/extensions/sbx_select_contigs/config.yml >> sunbeam_config.yml
     
-You need at least one BLAST database for this extension to work. The relevant config sections might look something like this:
+You need at least one BLAST database for this extension to work. The relevant sections of your `sunbeam_confif.yml` might look something like this:
 
     ...
+    
     blastdbs:
       root_fp: '/home/me/my_awesome_project'
       nucleotide:
          my_awesome_organism: 'my_awesome_organism_genomes.fasta'
+         
     ...
+    
     sbx_select_contigs:
       threads: 4
       dbname: 'my_awesome_organism'
   
 ## Running
 
-Run as usual, specifying `select_all` as the target rule, and adding `--use-conda` so that Snakemake handles all your dependencies for you:
+Run as usual, specifying `select_all` as the target rule, and adding `--use-conda` so that Snakemake handles all the extension's dependencies for you:
 
      sunbeam run --configfile sunbeam_config.yml --use_conda select_all
