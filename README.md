@@ -14,7 +14,7 @@ Otherwise, clone the extension into your Sunbeam extensions dir:
 
 ## Initialization
 
-In Sunbeam >=3.0, to add the `sbx_select_contigs` options to your config file:
+In Sunbeam >=3.0, to add the `sbx_select_contigs` options to your config file after installing the extension:
 
     sunbeam config update -i sunbeam_config.yml
 
