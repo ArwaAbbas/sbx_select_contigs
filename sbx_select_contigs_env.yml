@@ -1,0 +1,10 @@
+channels:
+  - conda-forge
+  - bioconda
+  - louiejtaylor
+dependencies:
+  - cap3
+  - pyviko
+  - r-tidyverse
+  - r-magrittr
+  - bioconductor-biostrings

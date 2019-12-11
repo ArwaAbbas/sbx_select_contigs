@@ -10,6 +10,8 @@ rule find_contigs:
     params:
         scriptdir = sunbeam_dir + '/extensions/sbx_select_contigs/find_contigs.R',
         dbname = Cfg['sbx_select_contigs']['dbname']
+    conda:
+        "sbx_select_contigs_env.yml"
     shell:
         """
         Rscript {params.scriptdir} {input} {params.dbname} {output}
@@ -23,6 +25,8 @@ rule select_contigs:
         temp(str(HITS_FP/'{sample}_positive_contigs.fa'))
     params:
         scriptdir = sunbeam_dir + '/extensions/sbx_select_contigs/select_contigs.R'
+    conda:
+        "sbx_select_contigs_env.yml"
     shell:
         """
         Rscript {params.scriptdir} {input.con} {input.pos} {output}
@@ -41,6 +45,8 @@ rule combine_contigs:
         qual = str(HITS_FP/'{sample}_positive_contigs.fa.cap.contigs.qual'),
 	ace = str(HITS_FP/'{sample}_positive_contigs.fa.cap.ace'),
 	cap3dir = str(HITS_FP/'cap3/')
+    conda:
+        "sbx_select_contigs_env.yml"
     shell:
         """
         [[ -s {input} ]] && \
@@ -56,7 +62,5 @@ rule combine_contigs:
 	"""
 
 rule select_all:
-    #input:
-        #expand(str(HITS_FP/'{sample}_positive_contigs.fa'),sample = Samples.keys())
     input:
         expand(str(HITS_FP/'combined'/'{sample}_positive_contigs_final.fa'),sample = Samples.keys())
