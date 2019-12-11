@@ -1,4 +1,0 @@
-cap3
-pyviko
-r-tidyverse
-r-magrittr
