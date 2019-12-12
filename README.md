@@ -22,7 +22,7 @@ Or, just add them manually (works with any version of Sunbeam):
 
     cat $SUNBEAM_DIR/extensions/sbx_select_contigs/config.yml >> sunbeam_config.yml
     
-You need at least one BLAST database for this extension to work. The relevant sections of your `sunbeam_confif.yml` might look something like this:
+You need at least one BLAST database for this extension to work. The relevant sections of your `sunbeam_config.yml` might look something like this:
 
     ...
     
